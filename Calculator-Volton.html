@@ -79,6 +79,15 @@
     <div id="rezultati2" class="result"></div>
   </div>
 
+  <!-- Kalkulatori i tretë (i ri) -->
+  <div class="calculator">
+    <h2>Kalkulatori 3 | Konkurrenti: 18.34 lekë/kWh | Volton: 16.9 lekë/kWh</h2>
+    <label>Fatura mujore me TVSH:</label>
+    <input type="number" id="fatura3" placeholder="p.sh. 5000" />
+    <button onclick="llogarit(18.34, 16.9, 'fatura3', 'rezultati3')">Llogarit</button>
+    <div id="rezultati3" class="result"></div>
+  </div>
+
   <script>
     function formatNumber(num) {
       return Math.round(num).toLocaleString('sq-AL');
