@@ -2,25 +2,40 @@
 <html lang="sq">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5, user-scalable=yes" />
   <title>ADC Portal</title>
   <link rel="icon" type="image/png" href="adc.png" />
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
 
   <style>
     :root{
-      --brand:#e60000;            /* e kuqja e ADC */
-      --brand-2:#d32f2f;          /* kuqe alternative */
-      --bg:#0b0c0f;               /* sfond i errët për hero/gradient */
-      --surface:#ffffff;          /* karta/panelet */
-      --muted:#6b7280;            /* gri teksti sekondar */
-      --line:#e6e7eb;             /* borde e lehtë */
-      --sidebar:#f7f7f8;          /* sfond anësor */
+      --brand:#e60000;
+      --brand-2:#d32f2f;
+      --brand-light:#ff4444;
+      --bg:#0b0c0f;
+      --surface:#ffffff;
+      --muted:#6b7280;
+      --line:#e6e7eb;
+      --sidebar:#f7f7f8;
       --shadow:0 10px 30px rgba(2,8,23,0.08);
+      --shadow-lg:0 20px 60px rgba(230,0,0,0.12);
+
+      /* Ngjyrat e seksioneve + tone më të errëta për gradient */
+      --vodafone:#d32f2f; --vodafone-h:#a52828;
+      --setup:#912983; --setup-h:#5e1b5c;
+      --volton:#2e7d32; --volton-h:#1b5e20;
+      --albsig:#d32f2f; --albsig-h:#a52828;
+      --b2b:#d32f2f; --b2b-h:#a52828;
+      --procedurat:#f59e0b; --procedurat-h:#ef6c00;
+      --skripte:#06b6d4; --skripte-h:#0891b2;
+      --reports:#0663d4; --reports-h:#06728c;
+      --hr:#16a34a; --hr-h:#166534;
+      --contracts:#ef4444; --contracts-h:#b91c1c;
     }
+    
     @media (prefers-color-scheme: dark){
       :root{
         --surface:#111315;
@@ -29,11 +44,12 @@
         --bg:#0b0c0f;
         --muted:#a3aab8;
         --shadow:0 12px 30px rgba(0,0,0,0.35);
+        --shadow-lg:0 25px 70px rgba(0,0,0,0.5);
       }
     }
 
     *{box-sizing:border-box}
-    html,body{height:100%}
+    html,body{height:100%; overflow-x:hidden;}
     body{
       margin:0;
       font-family:Inter, system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial, "Noto Sans", "Apple Color Emoji","Segoe UI Emoji";
@@ -41,22 +57,38 @@
       color:#111827;
     }
 
-    /* Header */
+    /* Header - IMPROVED */
     header.appbar{
       position:sticky; top:0; z-index:50;
       display:flex; align-items:center; gap:14px;
       padding:14px 18px;
       background:linear-gradient(120deg, var(--bg) 0%, #20232a 60%, #1a1f26 100%);
-      color:#fff;
+      color:#fff; 
       border-bottom:1px solid rgba(255,255,255,0.06);
+      box-shadow:0 4px 20px rgba(0,0,0,0.15);
     }
-    .appbar .brand{display:flex; align-items:center; gap:12px; cursor:pointer}
+    .appbar .brand{
+      display:flex; align-items:center; gap:12px; cursor:pointer;
+      transition:transform .2s ease;
+    }
+    .appbar .brand:hover{transform:scale(1.02)}
     .appbar img{height:36px; width:auto}
     .appbar h1{font-size:18px; line-height:1; margin:0; font-weight:700; letter-spacing:.2px}
     .appbar .spacer{flex:1}
     .social-icons{display:flex; gap:14px; align-items:center}
-    .social-icons a{color:#e5e7eb; font-size:16px; transition:transform .2s ease, color .2s ease}
-    .social-icons a:hover{color:#fff; transform:translateY(-1px)}
+    .social-icons a{
+      color:#e5e7eb; font-size:16px; 
+      transition:transform .2s ease, color .2s ease;
+      width:32px; height:32px;
+      display:flex; align-items:center; justify-content:center;
+      border-radius:8px;
+      background:rgba(255,255,255,0.05);
+    }
+    .social-icons a:hover{
+      color:#fff; 
+      transform:translateY(-2px); 
+      background:rgba(255,255,255,0.1);
+    }
 
     /* Layout */
     .layout{display:grid; grid-template-columns: 300px 1fr; min-height:calc(100vh - 64px)}
@@ -73,99 +105,595 @@
       background:transparent;
     }
 
-    /* Sidebar groups */
-    .group{border:1px solid var(--line); border-radius:14px; background:var(--surface); box-shadow:var(--shadow); overflow:hidden; margin-bottom:14px}
+    /* Grupi i menuseve - IMPROVED */
+    .group{
+      border:1px solid var(--line);
+      border-radius:14px;
+      background:var(--surface);
+      box-shadow:var(--shadow);
+      overflow:hidden;
+      margin-bottom:14px;
+      transition:transform .2s ease, box-shadow .25s ease, border-color .25s ease;
+    }
+    .group:hover{
+      transform:translateY(-2px); 
+      box-shadow:var(--shadow-lg);
+    }
+
+    /* OPSIONET KRYESORE - IMPROVED */
     .group summary{
       list-style:none; cursor:pointer; user-select:none;
-      display:flex; align-items:center; gap:10px; padding:12px 14px; font-weight:700;
+      display:flex; align-items:center; gap:10px;
+      padding:12px 14px; font-weight:800;
       background:linear-gradient(180deg, rgba(0,0,0,0.02), rgba(0,0,0,0));
+      border:1px solid var(--line); 
+      border-radius:12px;
+      position:relative;
+      transition:transform .15s ease, box-shadow .2s ease, border-color .2s ease, background .2s ease;
+      min-height:48px;
     }
     .group summary::-webkit-details-marker{display:none}
+    .group summary:hover{
+      transform:translateY(-1px);
+      box-shadow:0 10px 24px rgba(2,8,23,0.10);
+      border-color:#dcdfe4;
+      background:rgba(0,0,0,0.04);
+    }
+    .group summary::after{
+      content:""; position:absolute; right:12px; top:50%; transform:translateY(-50%) rotate(0deg);
+      width:10px; height:10px; border-right:2px solid #9aa1ad; border-bottom:2px solid #9aa1ad; border-radius:1px;
+      transition:transform .25s ease, border-color .2s ease;
+    }
+    .group[open] summary::after{ 
+      transform:translateY(-50%) rotate(45deg); 
+      border-color:#6b7280; 
+    }
+
+    /* NGJYRAT E IKONAVE */
     .group[data-color="vodafone"] summary i{color:#d32f2f}
     .group[data-color="setup"] summary i{color:#912983}
     .group[data-color="volton"] summary i{color:#2e7d32}
-    .group[data-color="albsig"] summary i{color:#2b6cb0}
+    .group[data-color="albsig"] summary i{color:#d32f2f}
     .group[data-color="procedurat"] summary i{color:#f59e0b}
     .group[data-color="skripte"] summary i{color:#06b6d4}
     .group[data-color="hr"] summary i{color:#16a34a}
-    .group[data-color="b2b"] summary i{color:#8b5cf6}
+    .group[data-color="b2b"] summary i{color:#d32f2f}
+    .group[data-color="reports"] summary i{color:#0663d4}
     .group[data-color="contracts"] summary i{color:#ef4444}
 
+    /* Nënopsionet - IMPROVED */
     .group .menu{
-      padding:10px; display:grid; gap:8px; background:linear-gradient(180deg, rgba(0,0,0,0.02), rgba(0,0,0,0));
+      padding:10px; display:grid; gap:10px;
+      background:linear-gradient(180deg, rgba(0,0,0,0.02), rgba(0,0,0,0));
     }
-
-    .menu button{
-      width:100%; text-align:left;
-      padding:10px 12px; border-radius:10px; border:1px solid var(--line);
-      background:#fff; color:#111827; font-weight:600; cursor:pointer;
-      transition:transform .12s ease, box-shadow .12s ease, background .2s ease, color .2s ease;
+    .group .menu button{
+      position:relative; width:100%; text-align:left;
+      padding:12px 44px 12px 14px; border-radius:12px; border:1px solid var(--line);
+      color:#fff; font-weight:700; letter-spacing:.2px; cursor:pointer;
+      box-shadow: 0 6px 18px rgba(2,8,23,.08);
+      transform:translateY(0);
+      transition:transform .12s ease, box-shadow .2s ease, filter .2s ease, background .2s ease, color .2s ease;
+      overflow:hidden;
+      min-height:48px;
+      font-size:15px;
     }
-    .menu button:hover{transform:translateY(-1px); box-shadow:var(--shadow)}
-    .menu button:focus{outline:3px solid rgba(230,0,0,.25)}
-    .menu button.active{background:#111827; color:#fff}
+    .group .menu button::before{
+      content:""; position:absolute; inset:0;
+      background:linear-gradient(180deg, rgba(255,255,255,.14), rgba(255,255,255,0));
+      pointer-events:none; border-radius:inherit;
+    }
+    .group .menu button::after{
+      content:"›"; position:absolute; right:14px; top:50%; transform:translateY(-50%);
+      font-weight:900; opacity:.9;
+      transition:right .2s ease;
+    }
+    .group .menu button:hover{
+      transform:translateY(-2px); 
+      box-shadow:0 10px 24px rgba(2,8,23,.12); 
+      filter:brightness(1.05);
+    }
+    .group .menu button:hover::after{
+      right:10px;
+    }
+    .group .menu button:active{
+      transform:translateY(1px); 
+      box-shadow:0 4px 14px rgba(2,8,23,.10); 
+      filter:brightness(.98);
+    }
+    .group .menu button:focus{
+      outline:3px solid rgba(255,255,255,.35); 
+      outline-offset:2px;
+    }
+    .menu button.active{filter:brightness(.97)}
 
-    /* Section color accents */
-    .menu button[data-accent="vodafone"].active{background:#111827}
-    .menu button[data-accent="setup"].active{background:#2b1532}
-    .menu button[data-accent="volton"].active{background:#062b0b}
+    /* APLIKO NGJYRAT sipas grupit */
+    .group[data-color="vodafone"] .menu button{background:linear-gradient(180deg, var(--vodafone), var(--vodafone-h))}
+    .group[data-color="setup"] .menu button{background:linear-gradient(180deg, var(--setup), var(--setup-h))}
+    .group[data-color="volton"] .menu button{background:linear-gradient(180deg, var(--volton), var(--volton-h))}
+    .group[data-color="albsig"] .menu button{background:linear-gradient(180deg, var(--albsig), var(--albsig-h))}
+    .group[data-color="b2b"] .menu button{background:linear-gradient(180deg, var(--b2b), var(--b2b-h))}
+    .group[data-color="procedurat"] .menu button{background:linear-gradient(180deg, var(--procedurat), var(--procedurat-h))}
+    .group[data-color="skripte"] .menu button{background:linear-gradient(180deg, var(--skripte), var(--skripte-h))}
+    .group[data-color="hr"] .menu button{background:linear-gradient(180deg, var(--hr), var(--hr-h))}
+    .group[data-color="reports"] .menu button{background:linear-gradient(180deg, var(--reports), var(--reports-h))}
+    .group[data-color="contracts"] .menu button{background:linear-gradient(180deg, var(--contracts), var(--contracts-h))}
 
-    /* Primary actions */
+    /* Primary actions - IMPROVED */
     .refresh-btn{
       margin-top:10px; width:100%;
       display:inline-flex; align-items:center; justify-content:center; gap:8px;
       padding:12px; border-radius:12px; border:1px solid var(--line);
-      background:linear-gradient(180deg, #0ea5e9, #0284c7); color:#fff; font-weight:700; cursor:pointer;
+      background:linear-gradient(180deg, #0ea5e9, #0284c7); 
+      color:#fff; font-weight:700; cursor:pointer;
       box-shadow:var(--shadow);
+      min-height:48px;
+      transition:transform .2s ease, filter .2s ease;
     }
-    .refresh-btn:hover{filter:brightness(1.05)}
+    .refresh-btn:hover{
+      filter:brightness(1.05);
+      transform:translateY(-2px);
+    }
 
-    /* Welcome / cards */
-    .portal{max-width:1050px; margin:auto}
+    /* Welcome / Hero - GREATLY IMPROVED */
+    .portal{max-width:1200px; margin:auto}
+    
     .hero{
-      background:linear-gradient(135deg, rgba(230,0,0,.06) 0%, rgba(230,0,0,.0) 60%),
-                 radial-gradient(800px 400px at 20% -10%, rgba(230,0,0,.18), transparent 60%),
+      position:relative;
+      background:linear-gradient(135deg, rgba(230,0,0,.08) 0%, rgba(230,0,0,.0) 70%),
+                 radial-gradient(900px 500px at 30% -10%, rgba(230,0,0,.15), transparent 65%),
                  var(--surface);
+      border:1px solid var(--line); 
+      border-radius:20px; 
+      padding:40px 32px; 
+      box-shadow:var(--shadow-lg);
+      overflow:hidden;
+      margin-bottom:32px;
+    }
+    
+    .hero::before{
+      content:'';
+      position:absolute;
+      top:-50%;
+      right:-20%;
+      width:600px;
+      height:600px;
+      background:radial-gradient(circle, rgba(230,0,0,0.08) 0%, transparent 70%);
+      border-radius:50%;
+      pointer-events:none;
+    }
+    
+    .hero-content{
+      position:relative;
+      z-index:1;
+    }
+    
+    .hero h2{
+      margin:0 0 12px 0; 
+      color:var(--brand); 
+      font-size:clamp(24px, 5vw, 36px);
+      font-weight:800;
+      line-height:1.2;
+    }
+    
+    .hero p{
+      margin:0 0 24px 0; 
+      color:var(--muted);
+      font-size:clamp(15px, 2vw, 18px);
+      line-height:1.6;
+      max-width:700px;
+    }
+
+    /* Search module - IMPROVED */
+    .search-wrap{margin-top:24px; display:grid; gap:12px}
+    .search-bar{
+      display:flex; 
+      gap:10px;
+      background:var(--surface);
+      padding:6px;
+      border-radius:14px;
+      border:2px solid var(--line);
+      box-shadow:var(--shadow);
+      transition:border-color .2s ease;
+    }
+    .search-bar:focus-within{
+      border-color:var(--brand);
+    }
+    .search-bar input{
+      flex:1; 
+      padding:12px 16px; 
+      border:none; 
+      border-radius:10px; 
+      outline:none; 
+      font-weight:600;
+      font-size:16px;
+      background:transparent;
+    }
+    .search-bar button{
+      padding:12px 20px; 
+      border-radius:10px; 
+      border:none; 
+      background:linear-gradient(135deg, var(--brand) 0%, var(--brand-2) 100%);
+      color:#fff;
+      cursor:pointer; 
+      font-weight:700;
+      min-height:48px;
+      transition:transform .2s ease, filter .2s ease;
+      box-shadow:0 4px 12px rgba(230,0,0,0.2);
+    }
+    .search-bar button:hover{
+      transform:translateY(-2px);
+      filter:brightness(1.1);
+    }
+    
+    .results{display:grid; gap:12px; margin-top:12px}
+    .result{
+      background:var(--surface); 
+      border:1px solid var(--line); 
+      border-left:4px solid var(--brand);
+      border-radius:14px; 
+      padding:16px; 
+      box-shadow:var(--shadow);
+      transition:transform .2s ease, box-shadow .2s ease;
+    }
+    .result:hover{
+      transform:translateY(-2px);
+      box-shadow:var(--shadow-lg);
+    }
+    .result h4{margin:0 0 8px 0; font-weight:700}
+    .result .meta{color:var(--muted); font-size:13px; margin-bottom:8px}
+    .result button{
+      min-height:44px;
+      font-size:15px;
+      padding:10px 16px;
       border:1px solid var(--line);
-      border-radius:18px; padding:28px; box-shadow:var(--shadow);
+      border-radius:10px;
+      background:#fff;
+      cursor:pointer;
+      font-weight:700;
+      transition:all .2s ease;
     }
-    .hero h2{margin:0 0 8px 0; color:var(--brand); font-size:28px}
-    .hero p{margin:0; color:var(--muted)}
+    .result button:hover{
+      background:var(--brand);
+      color:#fff;
+      border-color:var(--brand);
+      transform:translateY(-1px);
+    }
+    .hl{background: #fff3cd; padding:0 4px; border-radius:4px; font-weight:700}
 
-    .quick{margin-top:18px; display:grid; grid-template-columns:repeat(auto-fill,minmax(260px,1fr)); gap:14px}
+    /* Quick links - IMPROVED */
+    .quick{
+      margin-top:24px; 
+      display:grid; 
+      grid-template-columns:repeat(auto-fill,minmax(280px,1fr)); 
+      gap:18px;
+    }
+    
     .qcard{
-      background:var(--surface); border:1px solid var(--line); border-left:6px solid var(--brand);
-      border-radius:14px; padding:14px 16px; box-shadow:var(--shadow);
+      position:relative;
+      background:var(--surface); 
+      border:1px solid var(--line); 
+      border-left:4px solid var(--brand);
+      border-radius:16px; 
+      padding:20px; 
+      box-shadow:var(--shadow);
+      min-height:80px;
+      transition:transform .3s ease, box-shadow .3s ease, border-left-width .3s ease;
+      overflow:hidden;
     }
-    .qcard a{display:inline-block; text-decoration:none; color:var(--brand); font-weight:700}
-    .qcard a:hover{text-decoration:underline}
+    
+    .qcard::before{
+      content:'';
+      position:absolute;
+      top:0;
+      left:0;
+      width:100%;
+      height:100%;
+      background:linear-gradient(135deg, rgba(230,0,0,0.03) 0%, transparent 50%);
+      opacity:0;
+      transition:opacity .3s ease;
+      pointer-events:none;
+    }
+    
+    .qcard:hover{
+      transform:translateY(-4px); 
+      box-shadow:var(--shadow-lg);
+      border-left-width:6px;
+    }
+    
+    .qcard:hover::before{
+      opacity:1;
+    }
+    
+    .qcard a{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      text-decoration:none; 
+      color:var(--brand); 
+      font-weight:700;
+      min-height:44px;
+      line-height:1.5;
+      font-size:16px;
+      transition:gap .2s ease;
+    }
+    
+    .qcard a:hover{
+      gap:12px;
+    }
+    
+    .qcard a i{
+      font-size:14px;
+      transition:transform .2s ease;
+    }
+    
+    .qcard a:hover i{
+      transform:translateX(2px);
+    }
 
-    /* Content frame */
-    .viewer{position:relative; height:70vh; border:1px solid var(--line); border-radius:14px; overflow:hidden; background:var(--surface); box-shadow:var(--shadow)}
+    /* Updates - IMPROVED */
+    .updates-grid{
+      margin-top:16px; 
+      display:grid; 
+      grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); 
+      gap:14px;
+    }
+    .update-card{
+      background:var(--surface); 
+      border:1px solid var(--line); 
+      border-radius:14px; 
+      padding:16px; 
+      box-shadow:var(--shadow);
+      transition:transform .2s ease, box-shadow .2s ease;
+    }
+    .update-card:hover{
+      transform:translateY(-2px);
+      box-shadow:var(--shadow-lg);
+    }
+    .tag{
+      display:inline-block; 
+      padding:4px 10px; 
+      border-radius:999px; 
+      font-size:12px; 
+      font-weight:700;
+      border:1px solid var(--line); 
+      margin-right:6px;
+      background:rgba(230,0,0,0.05);
+      color:var(--brand);
+    }
+    .update-card a{
+      display:inline-flex;
+      align-items:center;
+      gap:6px;
+      color:var(--brand);
+      font-weight:700;
+      text-decoration:none;
+      transition:gap .2s ease;
+    }
+    .update-card a:hover{
+      gap:10px;
+      text-decoration:underline;
+    }
+
+    /* Content frame - IMPROVED */
+    .viewer{
+      position:relative; 
+      height:85vh; 
+      border:1px solid var(--line); 
+      border-radius:16px; 
+      overflow:hidden; 
+      background:var(--surface); 
+      box-shadow:var(--shadow-lg);
+    }
     .viewer iframe{position:absolute; inset:0; width:100%; height:100%; border:0}
     .loader{
-      position:absolute; inset:0; display:flex; align-items:center; justify-content:center; gap:12px;
-      background:linear-gradient(180deg, rgba(255,255,255,.7), rgba(255,255,255,.6));
-      backdrop-filter: blur(6px);
-      font-weight:700; color:#111827;
+      position:absolute; inset:0; 
+      display:flex; align-items:center; justify-content:center; gap:12px;
+      background:linear-gradient(180deg, rgba(255,255,255,.85), rgba(255,255,255,.75));
+      backdrop-filter: blur(8px); 
+      font-weight:700; 
+      color:#111827;
     }
-    .dot{width:8px;height:8px;border-radius:999px;background:var(--brand);animation:bounce .9s infinite alternate}
+    .dot{
+      width:10px;
+      height:10px;
+      border-radius:999px;
+      background:var(--brand);
+      animation:bounce .9s infinite alternate;
+    }
     .dot:nth-child(2){animation-delay:.15s}
     .dot:nth-child(3){animation-delay:.3s}
-    @keyframes bounce{to{transform:translateY(-6px); opacity:.7}}
+    @keyframes bounce{to{transform:translateY(-8px); opacity:.6}}
 
-    /* Mobile */
+    /* Backdrop overlay - IMPROVED */
+    .backdrop{
+      display:none;
+      position:fixed;
+      inset:0;
+      background:rgba(0,0,0,0.6);
+      z-index:99;
+      backdrop-filter:blur(4px);
+      animation:fadeIn .3s ease;
+    }
+    .backdrop.show{display:block}
+    @keyframes fadeIn{from{opacity:0} to{opacity:1}}
+
+    /* Mobile toggle */
     .toggle{display:none}
+
+    /* Custom scrollbar */
+    ::-webkit-scrollbar{
+      width:8px;
+      height:8px;
+    }
+    
+    ::-webkit-scrollbar-track{
+      background:var(--sidebar);
+    }
+    
+    ::-webkit-scrollbar-thumb{
+      background:var(--muted);
+      border-radius:4px;
+    }
+    
+    ::-webkit-scrollbar-thumb:hover{
+      background:var(--brand);
+    }
+
+    /* Smooth scrolling */
+    html{
+      scroll-behavior:smooth;
+    }
+
+    /* ========== MOBILE OPTIMIZATIONS ========== */
     @media (max-width: 1024px){
       .layout{grid-template-columns: 1fr}
-      aside.sidebar{position:fixed; top:64px; left:0; right:0; height:auto; max-height:65vh; transform:translateY(-120%); transition:transform .2s ease}
-      aside.sidebar.open{transform:translateY(0%)}
-      .toggle{display:inline-flex; align-items:center; gap:8px; border:1px solid var(--line); background:#fff; color:#111827; padding:8px 12px; border-radius:10px; font-weight:700; cursor:pointer}
-      main.content{padding:18px}
+      
+      aside.sidebar{
+        position:fixed; 
+        top:64px; 
+        left:0; 
+        right:0; 
+        height:auto; 
+        max-height:75vh; 
+        transform:translateY(-120%); 
+        transition:transform .3s cubic-bezier(0.4, 0, 0.2, 1);
+        z-index:100;
+        border-radius:0 0 20px 20px;
+        box-shadow:0 10px 40px rgba(0,0,0,0.3);
+      }
+      
+      aside.sidebar.open{
+        transform:translateY(0%);
+      }
+      
+      .toggle{
+        display:inline-flex; 
+        align-items:center; 
+        gap:8px; 
+        border:1px solid rgba(255,255,255,0.2); 
+        background:rgba(255,255,255,0.1); 
+        color:#fff; 
+        padding:8px 14px; 
+        border-radius:10px; 
+        font-weight:700; 
+        cursor:pointer;
+        min-height:44px;
+        font-size:15px;
+        transition:background .2s ease;
+      }
+      
+      .toggle:hover{
+        background:rgba(255,255,255,0.15);
+      }
+      
+      main.content{padding:20px 16px}
+      
+      .hero{
+        padding:24px 20px !important;
+        border-radius:16px;
+        margin-bottom:24px;
+      }
+      
+      .hero h2{font-size:24px}
+      
+      .hero p{
+        font-size:15px;
+        margin-bottom:16px !important;
+      }
+      
+      .search-bar{
+        flex-direction:column;
+        gap:8px;
+      }
+      
+      .search-bar button{
+        width:100%;
+      }
+      
+      .quick{
+        grid-template-columns:1fr;
+        gap:14px;
+      }
+      
+      .updates-grid{
+        grid-template-columns:1fr;
+      }
+      
+      .viewer{
+        height:70vh;
+        border-radius:12px;
+      }
+      
+      .appbar{
+        padding:12px 14px;
+      }
+      
+      .appbar img{height:32px}
+      .appbar h1{font-size:16px}
+      
+      .social-icons{gap:10px}
+      .social-icons a{
+        width:28px;
+        height:28px;
+        font-size:14px;
+      }
+      
+      .group summary{
+        font-size:15px;
+      }
+      
+      .result{
+        padding:14px;
+      }
+    }
+
+    @media (max-width: 640px){
+      .appbar h1{display:none}
+      .appbar img{height:28px}
+      main.content{padding:16px 12px}
+      
+      .hero{
+        padding:20px 16px !important;
+      }
+      
+      .hero h2{font-size:22px}
+      
+      .social-icons{gap:8px}
+      
+      aside.sidebar{
+        max-height:80vh;
+      }
+      
+      .group{
+        margin-bottom:10px;
+      }
+    }
+
+    @media (max-width: 1024px) and (orientation: landscape){
+      aside.sidebar{
+        max-height:85vh;
+      }
+      .viewer{
+        height:calc(100vh - 80px);
+      }
+    }
+
+    @media (max-width: 1024px) and (prefers-color-scheme: dark){
+      .toggle{
+        background:rgba(255,255,255,0.1);
+        color:#fff;
+        border-color:rgba(255,255,255,0.2);
+      }
+      aside.sidebar{
+        box-shadow:0 10px 40px rgba(0,0,0,0.6);
+      }
     }
   </style>
 </head>
 <body>
+  <!-- Backdrop for mobile sidebar -->
+  <div class="backdrop" id="backdrop" onclick="closeSidebar()"></div>
+
   <!-- Header -->
   <header class="appbar" role="banner">
     <div class="brand" onclick="resetToMain()" title="Kthehu në faqen kryesore">
@@ -179,7 +707,7 @@
     <nav class="social-icons" aria-label="Rrjetet sociale">
       <a href="https://www.facebook.com" target="_blank" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
       <a href="https://www.instagram.com/albanian_development_company?igsh=bXRobW45bmU0NWhm" target="_blank" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
-      <a href="https://www.linkedin.com" target="_blank" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+      <a href="https://www.linkedin.com/company/albanian-development-company/posts/?feedView=all" target="_blank" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
     </nav>
   </header>
 
@@ -190,33 +718,33 @@
       <details class="group" data-color="vodafone" open>
         <summary><i class="fas fa-mobile-alt"></i> Vodafone</summary>
         <div class="menu">
-          <button data-accent="vodafone" onclick="loadPage(this,'vodafone-internet-fiks-individ.html')">Fix Residencial</button>
-          <button data-accent="vodafone" onclick="loadPage(this,'vodafone_tariff_comparison.html')">Fix Business</button>
-          <button data-accent="vodafone" onclick="loadPage(this,'faqe_vodafone.html')">Ofertat Residencial</button>
-          <button data-accent="vodafone" onclick="loadPage(this,'Internet-Speed.html')">Internet Calculator</button>
-          <button data-accent="vodafone" onclick="loadPage(this,'planet_tarifore_biznes.html')">Planet Mobile Business</button>
-          <button data-accent="vodafone" onclick="loadPage(this,'Planet-standarde-biznes.html')">Planet Mobile Standard</button>
-          <button data-accent="vodafone" onclick="loadPage(this,'paketat_vodafone_interaktive_finale.html')">Kanalet Televizive</button>
+          <button onclick="loadPage(this,'vodafone-internet-fiks-individ.html')">Fix Residencial</button>
+          <button onclick="loadPage(this,'vodafone_tariff_comparison.html')">Fix Business</button>
+          <button onclick="loadPage(this,'faqe_vodafone.html')">Ofertat Residencial</button>
+          <button onclick="loadPage(this,'planet_tarifore_biznes.html')">Planet Mobile Business</button>
+          <button onclick="loadPage(this,'Planet-standarde-biznes.html')">Planet Mobile Standard</button>
+          <button onclick="loadPage(this,'Mobile_Tool.html')">Tariff Migration Tool</button>
+          <button onclick="loadPage(this,'paketat_vodafone_interaktive_finale.html')">Kanalet Televizive</button>
         </div>
       </details>
 
       <details class="group" data-color="setup">
         <summary><i class="fas fa-cogs"></i> Setup</summary>
         <div class="menu">
-          <button data-accent="setup" onclick="loadPage(this,'sherbimet_dhe_pikat_forta.html')">Set/Up service</button>
-          <button data-accent="setup" onclick="loadPage(this,'setup_script.html')">Set/Up script</button>
-          <button data-accent="setup" onclick="loadPage(this,'preventiv_website.html')">Website tariffs</button>
-          <button data-accent="setup" onclick="loadPage(this,'setup-dashboard.html')">Selling IT service</button>
-          <button data-accent="setup" onclick="loadPageExternal('https://setup.al/about-us/')">Set/Up web</button>
+          <button onclick="loadPage(this,'sherbimet_dhe_pikat_forta.html')">Set/Up service</button>
+          <button onclick="loadPage(this,'setup_script.html')">Set/Up script</button>
+          <button onclick="loadPage(this,'preventiv_website.html')">Website tariffs</button>
+          <button onclick="loadPage(this,'setup-dashboard.html')">Selling IT service</button>
+          <button onclick="loadPageExternal('https://setup.al/about-us/')">Set/Up web</button>
         </div>
       </details>
 
       <details class="group" data-color="volton">
         <summary><i class="fas fa-bolt"></i> Volton</summary>
         <div class="menu">
-          <button data-accent="volton" onclick="loadPage(this,'Calculator-Volton.html')">Volton Calculator</button>
-          <button data-accent="volton" onclick="loadPage(this,'faq_volton.html')">Volton FAQ</button>
-          <button data-accent="volton" onclick="loadPageExternal('https://volton.al/#services')">Volton Website</button>
+          <button onclick="loadPage(this,'Calculator-Volton.html')">Volton Calculator</button>
+          <button onclick="loadPage(this,'faq_volton.html')">Volton FAQ</button>
+          <button onclick="loadPageExternal('https://volton.al/')">Volton Website</button>
         </div>
       </details>
 
@@ -225,6 +753,10 @@
         <div class="menu">
           <button onclick="loadPage(this,'Albsig.html')">Siguracionet</button>
           <button onclick="loadPage(this,'sigurime_akomodimi.html')">Çmimet e Siguracioneve</button>
+          <button onclick="loadPage(this,'Sigurimi_prones.html')">Kalkulatori Siguracionit</button>
+          <button onclick="loadPageExternal('https://www.albsig.al/')">Albsig Website</button>
+          <button onclick="loadPageExternal('https://web.albsig.al/en/#/policy/tpl/form/0')">Siguracioni TPL</button>
+          <button onclick="loadPageExternal('https://web.albsig.al/en/#/kasko-insurance/form')">Siguracioni Casco</button>
         </div>
       </details>
 
@@ -234,6 +766,7 @@
           <button onclick="loadPage(this,'Documentation.html')">Documentation</button>
           <button onclick="loadPage(this,'proceset_agjentit_tlm_final.html')">TLM processes</button>
           <button onclick="loadPageExternal('https://forms.office.com/e/JdsFWi6MFh')">Agent test form</button>
+          <button onclick="window.open('Logjistike.html','_blank')">Logistic</button>
         </div>
       </details>
 
@@ -241,6 +774,9 @@
         <summary><i class="fas fa-scroll"></i> Skripte</summary>
         <div class="menu">
           <button onclick="loadPage(this,'skripti_per_shitje.html')">Scripte për shitje</button>
+          <button onclick="loadPage(this,'manual_telesales_perditesuar.html')">Scripte për shitje 2</button>
+          <button onclick="loadPage(this,'skripte_kliente_skeptike.html')">Scripte për shitje 3</button>
+          <button onclick="loadPage(this,'help.html')">Help</button>
         </div>
       </details>
 
@@ -248,6 +784,7 @@
         <summary><i class="fas fa-users"></i> Burimet Njerezore</summary>
         <div class="menu">
           <button onclick="loadPageExternal('https://adc.al/careers')">Vacancies</button>
+          <button onclick="loadPageExternal('Attendance.html')">Attendance</button>
         </div>
       </details>
 
@@ -258,6 +795,16 @@
           <button onclick="loadPage(this,'NCE Microsoft Office 365 Customer Presentation (002).pdf')">Office 365</button>
           <button onclick="loadPage(this,'Prezantim Klienti - Vodafone Business Online.pdf')">Business Online</button>
           <button onclick="loadPage(this,'business_on_the_go_vodafone.html')">BusinessOntheGO</button>
+        </div>
+      </details>
+
+      <details class="group" data-color="reports">
+        <summary><i class="fas fa-folder-open"></i> Reports</summary>
+        <div class="menu">
+          <button onclick="loadPage(this,'raport-update-2.html')">Sales Reports</button>
+          <button onclick="loadPage(this,'lead_txt_to_report_multifile_filters_charts.html')">TLM Reports</button>
+          <button onclick="loadPage(this,'info.extract.html')">Extract pdf</button>
+          <button onclick="window.open('roadmap2.html','_blank')">TLM Roadmap</button>
         </div>
       </details>
 
@@ -277,16 +824,60 @@
     <main class="content" id="content">
       <div class="portal" id="home">
         <section class="hero" role="region" aria-label="Mirë se vini">
-          <h2>Mirë se vini në ADC Portal</h2>
-          <p>Këtu do të gjeni informacionet dhe mjetet që ju duhen për punën e përditshme.</p>
+          <div class="hero-content">
+            <h2>Mirë se vini në ADC Portal</h2>
+            <p>Platformë e centralizuar për të gjitha mjetet dhe informacionet që ju duhen për punën e përditshme. Eksploroni shërbimet tona dhe gjeni zgjidhjen e duhur për klientët tuaj.</p>
+          </div>
         </section>
+
+        <!-- SEARCH në faqen kryesore -->
+        <section class="search-wrap" aria-label="Kërko në përmbajtje">
+          <div class="search-bar">
+            <input id="q" type="search" placeholder="Kërko në të gjitha faqet (p.sh. 'Planet Business', 'Volton', 'kontratë'…)" />
+            <button onclick="runSearch()"><i class="fas fa-search"></i> Kërko</button>
+          </div>
+          <div id="search-stats" class="meta" style="color:var(--muted)"></div>
+          <div id="results" class="results"></div>
+        </section>
+
+        <!-- Lidhje të shpejta -->
         <section class="quick" aria-label="Lidhje të shpejta">
-          <div class="qcard"><a href="#" onclick="loadPage(null,'faqe_vodafone.html')">Ofertat Fix Rezidencial</a></div>
-          <div class="qcard"><a href="#" onclick="loadPage(null,'faq_volton.html')">Volton FAQ</a></div>
-          <div class="qcard"><a href="#" onclick="loadPage(null,'sherbimet_dhe_pikat_forta.html')">Setup Service</a></div>
-          <div class="qcard"><a href="#" onclick="loadPage(null,'proceset_agjentit_tlm_final.html')">Proceset Vodafone</a></div>
-          <div class="qcard"><a href="#" onclick="loadPage(null,'siguracione_albsig.html')">Siguracionet Albsig</a></div>
-          <div class="qcard"><a target="_blank" rel="noopener" href="https://adc.al/careers">Pozicione të lira</a></div>
+          <div class="qcard">
+            <a href="#" onclick="return openHome(event,'faqe_vodafone.html')">
+              Ofertat Fix Rezidencial <i class="fas fa-arrow-right"></i>
+            </a>
+          </div>
+          <div class="qcard">
+            <a href="#" onclick="return openHome(event,'faq_volton.html')">
+              Volton FAQ <i class="fas fa-arrow-right"></i>
+            </a>
+          </div>
+          <div class="qcard">
+            <a href="#" onclick="return openHome(event,'sherbimet_dhe_pikat_forta.html')">
+              Setup Service <i class="fas fa-arrow-right"></i>
+            </a>
+          </div>
+          <div class="qcard">
+            <a href="#" onclick="return openHome(event,'proceset_agjentit_tlm_final.html')">
+              Proceset Vodafone <i class="fas fa-arrow-right"></i>
+            </a>
+          </div>
+          <div class="qcard">
+            <a href="#" onclick="return openHome(event,'Albsig.html')">
+              Siguracionet Albsig <i class="fas fa-arrow-right"></i>
+            </a>
+          </div>
+          <div class="qcard">
+            <a href="#" onclick="return openHome(event,'https://adc.al/careers')">
+              Pozicione të lira <i class="fas fa-external-link-alt"></i>
+            </a>
+          </div>
+        </section>
+
+        <!-- Updates & Njoftime -->
+        <section aria-label="Updates & Njoftime">
+          <h3 style="margin:24px 0 12px 0; font-weight:800; font-size:20px">Updates & Njoftime</h3>
+          <div id="updates" class="updates-grid"></div>
         </section>
       </div>
 
@@ -301,69 +892,293 @@
   </div>
 
   <script>
-    // Sidebar open/close for mobile
+    /* ======= Sidebar & Viewer ======= */
     function toggleSidebar(btn){
       const sidebar = document.getElementById('sidebar');
+      const backdrop = document.getElementById('backdrop');
       const open = !sidebar.classList.contains('open');
       sidebar.classList.toggle('open', open);
+      backdrop.classList.toggle('show', open);
       if(btn){ btn.setAttribute('aria-expanded', String(open)); }
+      
+      if(window.innerWidth <= 1024){
+        document.body.style.overflow = open ? 'hidden' : '';
+      }
+    }
+    
+    function closeSidebar(){
+      const sidebar = document.getElementById('sidebar');
+      const backdrop = document.getElementById('backdrop');
+      sidebar.classList.remove('open');
+      backdrop.classList.remove('show');
+      document.body.style.overflow = '';
+      const toggleBtn = document.querySelector('.toggle');
+      if(toggleBtn){ toggleBtn.setAttribute('aria-expanded', 'false'); }
+    }
+    
+    function closeAllMenus(){ 
+      document.querySelectorAll('aside details').forEach(d=>{ d.open=false; }); 
     }
 
-    // Close all <details> groups
-    function closeAllMenus(){
-      document.querySelectorAll('aside details').forEach(d=>{ d.open=false; });
+    function showViewer(){ 
+      document.getElementById('home').hidden = true; 
+      document.getElementById('viewer').hidden = false; 
     }
-
-    function refreshAndCloseMenus(){
-      const frame = document.getElementById('frame');
-      if(frame && frame.src){ frame.contentWindow?.location.reload(); }
-      closeAllMenus();
+    function showHome(){ 
+      document.getElementById('viewer').hidden = true; 
+      document.getElementById('home').hidden = false; 
     }
-
-    function showViewer(){
-      document.getElementById('home').hidden = true;
-      document.getElementById('viewer').hidden = false;
-    }
-
-    function showHome(){
-      document.getElementById('viewer').hidden = true;
-      document.getElementById('home').hidden = false;
-    }
-
     function setActive(btn){
       document.querySelectorAll('.menu button').forEach(b=>b.classList.remove('active'));
       if(btn){ btn.classList.add('active'); }
     }
 
+    /* Router helpers */
+    let _suppressPush = false;
+    function pushRoute(state){
+      if(_suppressPush) return;
+      const urlPart = state.view === 'home' ? '#/home' : '#/page/' + encodeURIComponent(state.url);
+      history.pushState(state, '', urlPart);
+    }
+    function applyState(state){
+      if(!state || state.view === 'home'){
+        setActive(null); showHome(); closeAllMenus();
+        const frame = document.getElementById('frame');
+        const loader = document.getElementById('loader');
+        if(frame) frame.src = '';
+        if(loader) loader.style.display = 'none';
+        return;
+      }
+      if(state.view === 'page' && state.url){
+        showViewer();
+        const frame = document.getElementById('frame');
+        const loader = document.getElementById('loader');
+        loader.style.display = 'flex';
+        requestAnimationFrame(()=>{ frame.src = state.url; });
+        frame.onload = ()=> loader.style.display = 'none';
+        frame.onerror = ()=> {
+          loader.style.display = 'none';
+          window.open(state.url, '_blank', 'noopener');
+        };
+        closeSidebar();
+      }
+    }
+    function parseHashToState(){
+      const h = location.hash || '';
+      if(h.startsWith('#/page/')){
+        const url = decodeURIComponent(h.slice('#/page/'.length));
+        return {view:'page', url};
+      }
+      return {view:'home'};
+    }
+    function initRouter(){
+      const initial = parseHashToState();
+      history.replaceState(initial, '', location.href);
+      applyState(initial);
+      window.addEventListener('popstate', (e)=>{
+        _suppressPush = true;
+        applyState(e.state || parseHashToState());
+        _suppressPush = false;
+      });
+    }
+
     function loadPage(btn, url){
       setActive(btn);
       showViewer();
-      const sidebar = document.getElementById('sidebar');
-      sidebar.classList.remove('open');
-
+      closeSidebar();
       const frame = document.getElementById('frame');
       const loader = document.getElementById('loader');
       loader.style.display = 'flex';
-
-      // Little delay to show the loader transition nicely
-      requestAnimationFrame(()=>{
-        frame.src = url;
-      });
-
+      requestAnimationFrame(()=>{ frame.src = url; });
       frame.onload = () => { loader.style.display = 'none'; };
-      frame.onerror = () => { loader.innerHTML = '<span style="font-weight:700;color:#ef4444">Nuk u ngarkua përmbajtja.</span>'; };
+      frame.onerror = () => {
+        loader.style.display = 'none';
+        window.open(url, '_blank', 'noopener');
+      };
+      pushRoute({view:'page', url});
     }
 
-    function loadPageExternal(url){
-      window.open(url, '_blank', 'noopener');
-    }
-
+    function refreshAndCloseMenus(){ resetToMain(); }
+    function loadPageExternal(url){ window.open(url, '_blank', 'noopener'); }
     function resetToMain(){
-      setActive(null);
-      showHome();
-      closeAllMenus();
+      setActive(null); showHome(); closeAllMenus(); closeSidebar();
       window.scrollTo({top:0, behavior:'smooth'});
+      const frame = document.getElementById('frame'); 
+      const loader = document.getElementById('loader');
+      if(frame) frame.src = '';
+      if(loader) loader.style.display = 'none';
+      pushRoute({view:'home'});
     }
+
+    function openHome(e, url){
+      if(e) e.preventDefault();
+      loadPage(null, url);
+      return false;
+    }
+    function openUpdate(e, url){
+      if(e) e.preventDefault();
+      loadPage(null, url);
+      return false;
+    }
+
+    /* ======= SEARCH ======= */
+    const PAGES = [
+      {title:"Vodafone · Fix Residencial", url:"vodafone-internet-fiks-individ.html", updated:"2025-08-01"},
+      {title:"Vodafone · Fix Business", url:"vodafone_tariff_comparison.html", updated:"2025-07-20"},
+      {title:"Vodafone · Ofertat Residencial", url:"faqe_vodafone.html", updated:"2025-08-11"},
+      {title:"Internet Calculator", url:"Internet-Speed.html", updated:"2025-06-15"},
+      {title:"Planet Mobile Business", url:"planet_tarifore_biznes.html", updated:"2025-05-30"},
+      {title:"Planet Mobile Standard", url:"Planet-standarde-biznes.html", updated:"2025-05-30"},
+      {title:"Kanalet Televizive", url:"paketat_vodafone_interaktive_finale.html", updated:"2025-04-12"},
+      {title:"Setup · Service", url:"sherbimet_dhe_pikat_forta.html", updated:"2025-07-10"},
+      {title:"Setup · Script", url:"setup_script.html", updated:"2025-07-01"},
+      {title:"Website tariffs", url:"preventiv_website.html", updated:"2025-06-10"},
+      {title:"Selling IT service", url:"setup-dashboard.html", updated:"2025-06-22"},
+      {title:"Albsig · Siguracionet", url:"Albsig.html", updated:"2025-03-02"},
+      {title:"Albsig · Çmimet e Siguracioneve", url:"sigurime_akomodimi.html", updated:"2025-05-05"},
+      {title:"Procedurat · Documentation", url:"Documentation.html", updated:"2025-02-15"},
+      {title:"Procedurat · TLM processes", url:"proceset_agjentit_tlm_final.html", updated:"2025-08-05"},
+      {title:"B2B · Office 365 Special", url:"vodafone_operator_csp.html", updated:"2025-02-01"},
+      {title:"B2B · Office 365 (PDF)", url:"NCE Microsoft Office 365 Customer Presentation (002).pdf", updated:"2024-12-01", pdf:true},
+      {title:"B2B · Business Online (PDF)", url:"Prezantim Klienti - Vodafone Business Online.pdf", updated:"2024-12-01", pdf:true},
+      {title:"BusinessOnTheGO", url:"business_on_the_go_vodafone.html", updated:"2025-01-12"},
+      {title:"Contracts & Forms", url:"Forms&Contracts.html", updated:"2025-03-18"},
+      {title:"Volton · FAQ", url:"faq_volton.html", updated:"2025-08-07"},
+      {title:"Volton · Calculator", url:"Calculator-Volton.html", updated:"2025-08-03"}
+    ];
+
+    const INDEX = new Map();
+    let indexing = false;
+
+    async function buildIndex(){
+      if(indexing || INDEX.size === PAGES.length) return;
+      indexing = true;
+      for(const p of PAGES){
+        try{
+          if(p.pdf){ INDEX.set(p.url, {title:p.title, text:"", updated:p.updated, pdf:true}); continue; }
+          const res = await fetch(p.url, {cache:'no-store'});
+          const html = await res.text();
+          const text = extractPlainText(html);
+          INDEX.set(p.url, {title:p.title, text, updated:p.updated, pdf:false});
+        }catch(e){
+          INDEX.set(p.url, {title:p.title, text:"", updated:p.updated, pdf: !!p.pdf});
+        }
+      }
+      indexing = false;
+    }
+    
+    function extractPlainText(html){
+      const tmp = document.createElement('div');
+      tmp.innerHTML = html.replace(/<script[\s\S]*?<\/script>/gi,'').replace(/<style[\s\S]*?<\/style>/gi,'');
+      const text = tmp.textContent || tmp.innerText || "";
+      return text.replace(/\s+/g,' ').trim();
+    }
+    
+    function highlight(text, q){
+      const esc = q.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+      return text.replace(new RegExp(esc,'gi'), m=>`<span class="hl">${m}</span>`);
+    }
+    
+    function snippet(text, q, len=140){
+      const i = text.toLowerCase().indexOf(q.toLowerCase());
+      if(i===-1) return text.slice(0, len) + (text.length>len?'…':'');
+      const start = Math.max(0, i - Math.floor(len/2));
+      const end = Math.min(text.length, start + len);
+      const slice = text.slice(start, end);
+      return (start>0?'…':'') + highlight(slice, q) + (end<text.length?'…':'');
+    }
+
+    let searchDebounce;
+    document.getElementById('q').addEventListener('input', ()=>{
+      clearTimeout(searchDebounce);
+      searchDebounce = setTimeout(()=> runSearch(), 200);
+    });
+
+    async function runSearch(){
+      const q = document.getElementById('q').value.trim();
+      const statsEl = document.getElementById('search-stats');
+      const resEl = document.getElementById('results');
+
+      if(!q){ statsEl.textContent = ""; resEl.innerHTML = ""; return; }
+
+      buildIndex();
+
+      const results = [];
+      for(const p of PAGES){
+        const item = INDEX.get(p.url);
+        if(!item) continue;
+        const hay = (p.title + " " + item.text).toLowerCase();
+        if(hay.includes(q.toLowerCase())){
+          const sn = item.text ? snippet(item.text, q) : '(PDF / pa tekst të disponueshëm)';
+          results.push({ title:p.title, url:p.url, updated:p.updated, snippet:sn, pdf:!!p.pdf });
+        }
+      }
+
+      if(!results.length && INDEX.size===0){
+        statsEl.textContent = "Po përgatitet indeksi… provo sërish pas pak sekondash.";
+        resEl.innerHTML = ""; return;
+      }
+
+      results.sort((a,b)=> b.updated.replace(/-/g,'').localeCompare(a.updated.replace(/-/g,'')));
+      statsEl.textContent = `${results.length} rezultat(e)`;
+      resEl.innerHTML = results.map(r=>`
+        <div class="result">
+          <h4>${r.title} ${r.pdf?'<span class="tag">PDF</span>':''}</h4>
+          <div class="meta">Përditësuar: ${r.updated || '-'}</div>
+          <div style="margin-top:8px; color:#374151">${r.snippet}</div>
+          <div style="margin-top:12px">
+            <button onclick="loadPage(null,'${r.url}')">
+              <i class="fas fa-external-link-alt"></i> Hap
+            </button>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    /* ======= Updates ======= */
+    const UPDATES = [
+      {date:"2025-08-11", type:"Update", title:"Ofertat Vodafone (Residencial) u përditësuan", link:"faqe_vodafone.html"},
+      {date:"2025-08-07", type:"Release", title:"Volton FAQ i rifreskuar", link:"faq_volton.html"},
+      {date:"2025-08-03", type:"Tool", title:"Volton Calculator v1.2", link:"Calculator-Volton.html"},
+      {date:"2025-07-20", type:"Update", title:"Fix Business tarifat: krahasimi i ri", link:"vodafone_tariff_comparison.html"},
+      {date:"2025-07-10", type:"Notice", title:"Set/Up Service: përditësime në paketat", link:"sherbimet_dhe_pikat_forta.html"}
+    ];
+    
+    function renderUpdates(){
+      const wrap = document.getElementById('updates');
+      if(!wrap) return;
+      const items = [...UPDATES].sort((a,b)=> b.date.localeCompare(a.date));
+      wrap.innerHTML = items.map(u=>`
+        <div class="update-card">
+          <div class="meta" style="color:var(--muted);font-size:13px;margin-bottom:6px">${u.date}</div>
+          <div style="margin-bottom:8px"><span class="tag">${u.type}</span></div>
+          <div style="font-weight:700;margin-bottom:10px">${u.title}</div>
+          ${u.link ? `<div>
+            <a href="#" onclick="return openUpdate(event,'${u.link}')">
+              Shiko më shumë <i class="fas fa-arrow-right"></i>
+            </a>
+          </div>` : ''}
+        </div>
+      `).join('');
+    }
+
+    window.addEventListener('resize', ()=>{
+      if(window.innerWidth > 1024){
+        closeSidebar();
+        document.body.style.overflow = '';
+      }
+    });
+
+    document.addEventListener('DOMContentLoaded', ()=>{
+      initRouter();
+      buildIndex();
+      renderUpdates();
+    });
   </script>
+
+  <script>
+  (function(){if(!window.chatbase||window.chatbase("getState")!=="initialized"){window.chatbase=(...arguments)=>{if(!window.chatbase.q){window.chatbase.q=[]}window.chatbase.q.push(arguments)};window.chatbase=new Proxy(window.chatbase,{get(target,prop){if(prop==="q"){return target.q}return(...args)=>target(prop,...args)}})}const onLoad=function(){const script=document.createElement("script");script.src="https://www.chatbase.co/embed.min.js";script.id="a5W5MKC2pqARkls71UKeB";script.domain="www.chatbase.co";document.body.appendChild(script)};if(document.readyState==="complete"){onLoad()}else{window.addEventListener("load",onLoad)}})();
+  </script>
+
 </body>
 </html>
